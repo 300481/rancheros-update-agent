@@ -4,22 +4,22 @@ metadata:
   name: alpine
   namespace: kube-system
   labels:
-    app: alpine
+    app: rua
 spec:
   selector:
     matchLabels:
-      app: alpine
+      app: rua
   template:
     metadata:
       labels:
-        app: alpine
+        app: rua
     spec:
       containers:
-      - image: 300481/rua:v0.1.4
+      - image: 300481/rua:v0.1.7
         name: rua
-        command: ["sleep"]
-        args: ["100000"]
         env:
+        - name: WAITTIME
+          value: 1800
         - name: NODE_IP
           valueFrom:
             fieldRef:
