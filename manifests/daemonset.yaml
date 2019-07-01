@@ -15,11 +15,11 @@ spec:
         app: rua
     spec:
       containers:
-      - image: 300481/rua:v0.1.8
+      - image: 300481/rua:v0.1.9
         name: rua
         env:
         - name: WAITTIME
-          value: 1800
+          value: "1800"
         - name: NODE_IP
           valueFrom:
             fieldRef:
