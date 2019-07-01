@@ -15,7 +15,7 @@ spec:
         app: rua
     spec:
       containers:
-      - image: 300481/rua:v0.1.9
+      - image: "300481/rua:{{ .ruaversion }}"
         name: rua
         env:
         - name: WAITTIME
