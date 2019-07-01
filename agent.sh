@@ -9,7 +9,13 @@ log() {
     echo "$(date) - $@"
 }
 
+prepareKnownHosts() {
+    mkdir -p /root/.ssh
+    echo "${NODE_IP} $(cat /root/hostkeys/ssh_host_ecdsa_key.pub)" > /root/.ssh/known_hosts
+}
+
 main() {
+    prepareKnownHosts
     while true ; do
         REBOOT_REQUIRED=$(ssh -i ${PRIVATE_KEY} rancher@${NODE_IP} [[ -f /var/run/reboot-required ]] && echo TRUE)
         if [[ "${REBOOT_REQUIRED}" == "TRUE"]] ; then

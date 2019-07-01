@@ -15,7 +15,7 @@ spec:
         app: alpine
     spec:
       containers:
-      - image: 300481/rua:v0.1.0
+      - image: 300481/rua:v0.1.1
         name: rua
         command: ["sleep"]
         args: ["100000"]
@@ -25,9 +25,16 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         volumeMounts:
-        - name: privateKey
-          mountPath: /root/ssh
+        - name: privatekey
+          mountPath: /root/ssh/id_rsa
+          subPath: id_rsa
+        - name: hostkey
+          mountPath: /root/hostkeys
       volumes:
-      - name: privateKey
+      - name: privatekey
         secret:
-          secretName: privateKey
+          secretName: privatekey
+          defaultMode: 0600
+      - name: hostkey
+        hostPath:
+          path: /etc/ssh
