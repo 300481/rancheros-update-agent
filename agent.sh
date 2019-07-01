@@ -9,6 +9,12 @@ log() {
     echo "$(date) - $@"
 }
 
+exit_script() {
+    echo "exit update agent ... bye"
+}
+
+trap exit_script SIGINT SIGTERM
+
 prepareKnownHosts() {
     mkdir -p /root/.ssh
     echo "${NODE_IP} $(cat /root/hostkeys/ssh_host_ecdsa_key.pub)" > /root/.ssh/known_hosts
