@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-CUSTOMER=${1}
+MODE=${1}
+CUSTOMER=${2}
 
-[[ $# -eq 0 ]] && { echo "usage: $0 CUSTOMER" ; exit ;}
+[[ $# -lt 2 ]] && { echo "usage: $0 [apply, delete] CUSTOMER" ; exit ;}
 
 # templating the secret for the private ssh key
 docker run -i --rm \
@@ -13,9 +14,32 @@ docker run -i --rm \
     --in /manifests/secret.yaml.tmpl \
     --out /manifests/secret.yaml
 
-# install the daemonset
-docker run -i --rm \
-    -v $(pwd)/../3141-customers/${CUSTOMER}:/data \
-    -v $(pwd)/manifests:/manifests \
-    300481/kubectl:v1.14.3 \
-    apply -f /manifests/*.yaml
+apply() {
+    # install the daemonset
+    docker run -i --rm \
+        -v $(pwd)/../3141-customers/${CUSTOMER}:/data \
+        -v $(pwd)/manifests:/manifests \
+        300481/kubectl:v1.14.3 \
+        apply -f /manifests/*.yaml
+}
+
+delete() {
+    # decommission the daemonset
+    docker run -i --rm \
+        -v $(pwd)/../3141-customers/${CUSTOMER}:/data \
+        -v $(pwd)/manifests:/manifests \
+        300481/kubectl:v1.14.3 \
+        delete -f /manifests/*.yaml
+}
+
+case ${MODE} in
+    apply)
+        apply
+        ;;
+    delete)
+        delete
+        ;;
+    *)
+        echo "usage: $0 [apply, delete] CUSTOMER"
+        ;;
+esac
