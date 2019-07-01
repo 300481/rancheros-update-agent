@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: alpine
+  name: rua
   namespace: kube-system
   labels:
     app: rua
@@ -15,7 +15,7 @@ spec:
         app: rua
     spec:
       containers:
-      - image: 300481/rua:v0.1.7
+      - image: 300481/rua:v0.1.8
         name: rua
         env:
         - name: WAITTIME
