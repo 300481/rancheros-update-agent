@@ -18,15 +18,15 @@ main() {
     prepareKnownHosts
     while true ; do
         REBOOT_REQUIRED=$(ssh -i ${PRIVATE_KEY} rancher@${NODE_IP} [[ -f /var/run/reboot-required ]] && echo TRUE)
-        if [[ "${REBOOT_REQUIRED}" == "TRUE"]] ; then
+        if [[ "${REBOOT_REQUIRED}" == "TRUE" ]] ; then
             log "reboot required - cancel updating"
             sleep ${WAITTIME}
             continue
         fi
 
         ROS_LIST=$(ssh -i ${PRIVATE_KEY} rancher@${NODE_IP} sudo ros os list)
-        CURRENT_ROS_VERSION=$(ssh -i ${PRIVATE_KEY} rancher@${NODE_IP} sudo ros os)
-        NUMBER_OF_LIST=$(grep -n "${CURRENT_ROS_VERSION}" <<< "${LIST}" | grep -o '^[0-9]*')
+        CURRENT_ROS_VERSION=$(ssh -i ${PRIVATE_KEY} rancher@${NODE_IP} sudo ros os version)
+        NUMBER_OF_LIST=$(grep -n "${CURRENT_ROS_VERSION}" <<< "${ROS_LIST}" | grep -o '^[0-9]*')
 
         if [[ ${NUMBER_OF_LIST} -eq 1 ]] ; then
             log "on latest version - cancel updating"
@@ -35,7 +35,7 @@ main() {
         fi
 
         NUMBER_OF_LIST=$(( NUMBER_OF_LIST - 1 ))
-        NEW_ROS_VERSION=$(awk "NR==${NUMBER_OF_LIST} { print \$1 }" <<< ${LIST})
+        NEW_ROS_VERSION=$(awk "NR==${NUMBER_OF_LIST} { print \$1 }" <<< ${ROS_LIST})
 
         log "updating RancherOS from ${CURRENT_ROS_VERSION} to ${NEW_ROS_VERSION}"
 
@@ -48,3 +48,5 @@ main() {
         sleep ${WAITTIME}
     done
 }
+
+main
