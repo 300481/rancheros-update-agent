@@ -3,7 +3,7 @@
 MODE=${1}
 CUSTOMER=${2}
 
-SELF_DIR=$(dirname $0)
+SELF_DIR=$(readlink -f $(dirname $0))
 
 [[ $# -lt 2 ]] && { echo "usage: $0 [apply, delete] CUSTOMER" ; exit ;}
 
@@ -13,7 +13,7 @@ docker run -i --rm \
     -v ${SELF_DIR}/../3141-customers/${CUSTOMER}/.ssh:/.ssh \
     300481/render:v0.1.3 \
     --var keyfile=/.ssh/id_rsa \
-    --var ruaversion=$(< ${SELF_DIR}/VERSION)
+    --var ruaversion=$(< ${SELF_DIR}/VERSION) \
     --indir /manifests/templates/ \
     --outdir /manifests/
 
