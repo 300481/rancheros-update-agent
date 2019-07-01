@@ -12,8 +12,7 @@ docker run -i --rm \
     -v ${SELF_DIR}/manifests:/manifests \
     -v ${SELF_DIR}/../3141-customers/${CUSTOMER}/.ssh:/.ssh \
     300481/render:v0.1.3 \
-    --var keyfile=/.ssh/id_rsa \
-    --var ruaversion=$(< ${SELF_DIR}/VERSION) \
+    --config /manifests/config/values.yaml
     --indir /manifests/templates/ \
     --outdir /manifests/
 
