@@ -20,7 +20,7 @@ apply() {
         -v $(pwd)/../3141-customers/${CUSTOMER}:/data \
         -v $(pwd)/manifests:/manifests \
         300481/kubectl:v1.14.3 \
-        apply -f /manifests/*.yaml
+        apply -f /manifests/
 }
 
 delete() {
@@ -29,7 +29,7 @@ delete() {
         -v $(pwd)/../3141-customers/${CUSTOMER}:/data \
         -v $(pwd)/manifests:/manifests \
         300481/kubectl:v1.14.3 \
-        delete -f /manifests/*.yaml
+        delete -f /manifests/
 }
 
 case ${MODE} in
