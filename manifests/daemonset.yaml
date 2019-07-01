@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: alpine
+  namespace: kube-system
+  labels:
+    app: alpine
+spec:
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers:
+      - image: 300481/rua:v0.1.0
+        name: rua
+        command: ["sleep"]
+        args: ["100000"]
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        volumeMounts:
+        - name: privateKey
+          mountPath: /root/ssh
+      volumes:
+      - name: privateKey
+        secret:
+          secretName: privateKey
